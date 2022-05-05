@@ -1,0 +1,200 @@
+<html>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>订单页</title>
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+  />
+
+  <div id="app"></div>
+  <!-- 引入样式文件 -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"
+  />
+
+  <!-- 引入 Vue 和 Vant 的 JS 文件 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+
+  <script>
+    // 在 #app 标签下渲染一个按钮组件
+    const picUrl = 'https://images.unsplash.com/photo-1513477967668-2aaf11838bd6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Z29vZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
+    const data = [
+      {
+        shopName: 'JD',
+        status: '已完成',
+        url: picUrl ,
+        price: 100,
+        amunt: 1,
+        name: 'Vuejs 设计与实现',
+      },
+      {
+        shopName: 'JD',
+        status: '已完成',
+        url: picUrl,
+        price: 100,
+        amunt: 1,
+        name: 'Vuejs 设计与实现',
+      },
+      {
+        shopName: '淘宝',
+        status: '已完成',
+        url: picUrl,
+        price: 100,
+        amunt: 1,
+        name: 'Vuejs 设计与实现',
+      },
+      {
+        shopName: '拼多多',
+        status: '已完成',
+        url: picUrl,
+        price: 100,
+        amunt: 1,
+        name: 'Vuejs 设计与实现',
+      },
+      {
+        shopName: '网易考拉',
+        status: '已完成',
+        url: picUrl,
+        price: 100,
+        amunt: 1,
+        name: 'Vuejs 设计与实现',
+      },
+      {
+        shopName: '网易严选',
+        status: '已完成',
+        url: picUrl,
+        price: 100,
+        amunt: 1,
+        name: 'Vuejs 设计与实现',
+      },
+    ];
+    const app = Vue.createApp({
+      data: () => {
+        return {
+          active: 0,
+          orders: data,
+          loading:false,
+          finished:false,
+          refreshing:false
+        };
+      },
+      methods:{
+        onRefresh(){
+          setTimeout(()=>{
+            this.orders = data
+            this.refreshing = false
+          },1000)
+        },
+        onLoad(){
+          setTimeout(()=>{
+            console.log(this)
+            this.orders = this.orders.concat([ {
+              shopName: '淘宝',
+              status: '已完成',
+              url: picUrl,
+              price: 100,
+              amunt: 1,
+              name: '你不知道的javascript',
+            }, {
+              shopName: '京东',
+              status: '已完成',
+              url: picUrl,
+              price: 100,
+              amunt: 1,
+              name: 'java编程思想',
+            },])
+             this.finished = true
+             this.loading =false
+          },1000)
+        }
+      },
+      template: `<van-tabs :swipeable="false" :ellipsis="false" v-model:active="active">
+      <van-tab title="全部订单">
+      <van-pull-refresh v-model="refreshing" :head-height="80" @refresh="onRefresh">
+      <div class="orderItems">
+        <van-list
+            v-model:loading="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+          >
+           
+              <div class="orderItem" v-for="(o,index) in orders" key="index">
+                <div class="shopName">{{o.shopName}}</div>
+                <div class="goodInfo">
+                  <div class="goodImg"><img :src="o.url"></div>
+                  <div class="goodName">{{o.name}}</div>
+                  <div class="priceInfo">
+                      <div class="price">￥{{o.price}}</div>
+                      <div class="amount">x{{o.amunt}}</div>
+                    </div>
+                </div>
+                
+              </div>
+          </van-list>
+          </div>
+      </van-pull-refresh>
+      </van-tab>
+      <van-tab title="待付款订单">内容 2</van-tab>
+      <van-tab title="待收货订单">内容 3</van-tab>
+      <van-tab title="已完成订单">内容 4</van-tab>
+      <van-tab title="已取消订单">内容 4</van-tab>
+    </van-tabs>`,
+    });
+    app.use(vant);
+
+    // 通过 CDN 引入时不会自动注册 Lazyload 组件
+    // 可以通过下面的方式手动注册
+    app.use(vant.Lazyload);
+
+    app.mount('#app');
+  </script>
+  <link rel="stylesheet" href="./style.css" ></link>
+  <style>
+  .van-pull-refresh{
+    padding-top:44px;
+  }
+  .van-tabs__wrap{
+    position:fixed;
+    left:0;
+    top:0;
+    background:#fff;
+    z-index:999;
+  }
+  .orderItems{
+    
+  }
+  .orderItem{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:5px;
+    margin-left:10px;
+    border-bottom:1px solid #ededef;
+    padding:5px 10px;
+  }
+  .orderItem img {
+    max-width: 100px;
+    max-height:80px;
+  }
+  .orderItem .shopName{
+    margin-bottom:5px;
+  }
+  .orderItem .goodInfo{
+    display:flex;
+    justify-content:space-between;
+  }
+  .goodInfo .goodName{
+    flex:1;
+    padding: 5px;
+  }
+  .goodInfo .priceInfo{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-end;
+  }
+
+  </style>
+</html>
