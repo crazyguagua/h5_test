@@ -77,7 +77,8 @@
           orders: data,
           loading:false,
           finished:false,
-          refreshing:false
+          refreshing:false,
+          page:1
         };
       },
       methods:{
@@ -89,7 +90,7 @@
         },
         onLoad(){
           setTimeout(()=>{
-            console.log(this)
+            console.log(1)
             this.orders = this.orders.concat([ {
               shopName: '淘宝',
               status: '已完成',
@@ -105,7 +106,11 @@
               amunt: 1,
               name: 'java编程思想',
             },])
-             this.finished = true
+            this.page++
+            if(this.page==5){
+              this.finished = true
+            }
+            
              this.loading =false
           },1000)
         }
@@ -155,6 +160,7 @@
   <style>
   .van-pull-refresh{
     padding-top:44px;
+    overflow:auto;
   }
   .van-tabs__wrap{
     position:fixed;
